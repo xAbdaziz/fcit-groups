@@ -46,7 +46,7 @@ function addAGroup() {
           ? null
           : "You didn't choose course number.",
       section: (value) =>
-        /^[a-zA-Z0-9]{3}$/.test(value)
+        /^[a-zA-Z0-9]{2,3}$/.test(value)
           ? null
           : "You didn't enter the section, or entered Invalid section",
       groupLink: (value) =>

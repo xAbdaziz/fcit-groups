@@ -13,7 +13,7 @@ export async function POST(req: Request) {
     const schema = z.object({
       courseCode: z.string().max(4).min(4),
       courseNumber: z.number().min(101).max(499),
-      section: z.string().min(3).max(3),
+      section: z.string().min(2).max(3),
       groupLink: z.string().url().max(48).refine((value) => value.startsWith("https://chat.whatsapp.com/"), { message: "Invalid group link" })
     });
 
