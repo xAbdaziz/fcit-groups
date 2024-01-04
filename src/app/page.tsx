@@ -1,11 +1,9 @@
-import Link from "next/link";
-import { Header } from "./components/Header";
+import { HeroText } from "./components/Hero";
 
 export default function Home() {
   return (
     <>
-
-
+      <HeroText/>
     </>
   );
 }

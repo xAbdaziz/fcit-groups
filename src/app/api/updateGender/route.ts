@@ -1,16 +1,22 @@
 import { db } from "~/server/db";
 import { z } from "zod";
+import { getServerAuthSession } from "~/server/auth";
+
 
 export async function POST(req: Request) {
+    const session = await getServerAuthSession();
+    if (!session){
+      return Response.json({ message: "Access denied" }, { status: 403 });
+    }
+
     const requestBodySchema = z.object({
-        email: z.string().email(),
         gender: z.number().min(1).max(2),
       });
 
-  const { email, gender } = requestBodySchema.parse(await req.json());
+  const { gender } = requestBodySchema.parse(await req.json());
 
-  const user = await db.user.update({
-    where: { email: email },
+  await db.user.update({
+    where: { id: session.user.id },
     data: { gender: gender },
   });
 

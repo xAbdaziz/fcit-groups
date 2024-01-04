@@ -20,27 +20,28 @@ model courses {
 model whatsapp_groups {
   group_id   String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   section    String   @db.VarChar(3)
-  gender     Int?     @default(0)
   group_link String   @db.VarChar(50)
   course_id  Int?
+  gender     Int?     @default(0)
+  owner_id   String?
+  User       User?    @relation(fields: [owner_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_owner_id")
   courses    courses? @relation(fields: [course_id], references: [course_id], onDelete: Cascade, onUpdate: NoAction)
 }
 
 model Account {
-  id                 String  @id @default(cuid())
-  userId             String
-  type               String
-  provider           String
-  providerAccountId  String
-  refresh_token      String?  @db.Text
-  access_token       String?  @db.Text
-  expires_at         Int?
-  token_type         String?
-  scope              String?
-  id_token           String?  @db.Text
-  session_state      String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
@@ -54,14 +55,15 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  gender        Int      @default(0)
-  accounts      Account[]
-  sessions      Session[]
+  id              String            @id @default(cuid())
+  name            String?
+  email           String?           @unique
+  emailVerified   DateTime?
+  image           String?
+  gender          Int               @default(0)
+  accounts        Account[]
+  sessions        Session[]
+  whatsapp_groups whatsapp_groups[]
 }
 
 model VerificationToken {

@@ -21,7 +21,7 @@ export function Header() {
 	const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] = useDisclosure(false);
 	const [isModalOpen, { toggle: toggleModal, close: closeModal }] = useDisclosure(false);
 
-	const {data: session} = useSession();
+	const { data: session } = useSession();
 
 	const handleSignInClick = () => {
 		closeDrawer();
@@ -41,19 +41,19 @@ export function Header() {
 				<Group justify="space-between" h="100%">
 					<p>FCIT Groups</p>
 					<Group h="100%" gap={0} visibleFrom="sm">
-						<Link href="#" className={classes.link}>
+						<Link href="/" className={classes.link}>
 							Home
 						</Link>
-						<Link href="#" className={classes.link}>
+						<Link href="/findAGroup" className={classes.link}>
 							Find a Group
 						</Link>
-						<Link href="#" className={classes.link}>
+						<Link href="/addAGroup" className={classes.link}>
 							Add a Group
 						</Link>
 					</Group>
 
 					<Group visibleFrom="sm">
-					{session ? (
+						{session ? (
 							<Button onClick={handleSignOutClick}>Sign Out</Button>
 						) : (
 							<Button onClick={handleSignInClick}>Sign In</Button>
@@ -77,13 +77,13 @@ export function Header() {
 				<ScrollArea h={`calc(100vh - ${rem(80)})`} mx="-md">
 					<Divider my="sm" />
 
-					<Link href="#" className={classes.link}>
+					<Link onClick={closeDrawer} href="/" className={classes.link}>
 						Home
 					</Link>
-					<Link href="#" className={classes.link}>
+					<Link onClick={closeDrawer} href="/findAGroup" className={classes.link}>
 						Find a Group
 					</Link>
-					<Link href="#" className={classes.link}>
+					<Link onClick={closeDrawer} href="/addAGroup" className={classes.link}>
 						Add a Group
 					</Link>
 
@@ -100,7 +100,7 @@ export function Header() {
 			</Drawer>
 
 			{/* Login Modal */}
-			<LoginModal opened={isModalOpen} onClose={closeModal} />
+			<LoginModal opened={isModalOpen} onClose={closeModal} disableClose={false}/>
 		</Box>
 	);
 }

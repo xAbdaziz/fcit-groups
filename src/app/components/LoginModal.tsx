@@ -4,7 +4,7 @@ import { useForm } from '@mantine/form';
 import { signIn } from "next-auth/react";
 
 
-function LoginModal({ opened, onClose }: { opened: boolean; onClose: () => void; }) {
+function LoginModal({ opened, onClose, disableClose }: { opened: boolean; onClose: () => void; disableClose: boolean; }) {
 	const [pressedSignIn, setPressedSignIn] = useState(false);
 	const form = useForm({
 		initialValues: {
@@ -19,15 +19,17 @@ function LoginModal({ opened, onClose }: { opened: boolean; onClose: () => void;
 	});
 
 
-	const handleSignIn = async (email: string) => {
-		signIn("email", { email, redirect: false }).then(() => {
+	const handleSignIn = (email: string) => {
+		void signIn("email", { email, redirect: false }).then(() => {
 			setPressedSignIn(true)
 		});
 	}
 
 	return (
 		<Modal opened={opened} onClose={onClose} title="Log in" centered overlayProps={{ backgroundOpacity: 0.55, blur: 3, }}
-		trapFocus={true} closeOnEscape={!pressedSignIn} closeOnClickOutside={!pressedSignIn} withCloseButton={!pressedSignIn}
+		trapFocus={true} closeOnEscape={disableClose ? false : !pressedSignIn}
+		closeOnClickOutside={disableClose ? false : !pressedSignIn}
+		withCloseButton={disableClose ? false : !pressedSignIn}
 		>
 			<form onSubmit={form.onSubmit((values) => handleSignIn(values.email))}>
 				<Text size="md" style={{ marginBottom: '20px' }}>

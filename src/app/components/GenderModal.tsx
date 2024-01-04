@@ -44,7 +44,7 @@ export function GenderModal() {
 	};
 
 	return (
-		<Modal opened={isModalOpen} onClose={() => { }} title="Before we start, let us get to know you better."
+		<Modal opened={isModalOpen} onClose={() => { return }} title="Before we start, let us get to know you better."
 			centered overlayProps={{ backgroundOpacity: 0.55, blur: 3 }}
 			trapFocus={true} closeOnEscape={false} closeOnClickOutside={false} withCloseButton={false}>
 			<Group justify="center" mt="md">
