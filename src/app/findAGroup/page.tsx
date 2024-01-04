@@ -1,6 +1,6 @@
 // page.tsx
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Select, Button, Text, Flex, rem, Table, Container } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import Link from 'next/link';
@@ -34,9 +34,11 @@ function FindAGroup() {
 
   const { data: session } = useSession();
 
-  if (!session) {
-    toggleModal
-  }
+  useEffect(() => {
+    if (!session) {
+      toggleModal();
+    }
+  }, [session]);
 
   const form = useForm({
     initialValues: {
