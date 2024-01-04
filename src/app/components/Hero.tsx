@@ -1,4 +1,5 @@
 import { Title, Text, Button, Container } from '@mantine/core';
+import Link from 'next/link';
 import { Dots } from '~/app/components/Dots';
 import classes from '~/styles/Hero.module.css';
 
@@ -23,7 +24,9 @@ export function HeroText() {
 
         <div className={classes.controls}>
           <Button className={classes.control} size="lg">
-            Get Started
+            <Link href="/addAGroup">
+              Get Started
+            </Link>
           </Button>
         </div>
       </div>
