@@ -38,7 +38,7 @@ function addAGroup() {
     },
     validate: {
       courseCode: (value) =>
-        /^(CPIS|CPCS|CPIT)$/.test(value)
+        /^(CPIS|CPCS|CPIT|STAT|BUS|MRKT|ACCT)$/.test(value)
           ? null
           : "You didn't choose course code.",
       courseNumber: (value) =>
