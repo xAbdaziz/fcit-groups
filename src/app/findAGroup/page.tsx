@@ -47,7 +47,7 @@ function FindAGroup() {
     },
     validate: {
       courseCode: (value) =>
-        /^(CPIS|CPCS|CPIT)$/.test(value)
+        /^(CPIS|CPCS|CPIT|STAT|BUS|MRKT|ACCT)$/.test(value)
           ? null
           : "You didn't choose course code.",
       courseNumber: (value) =>
@@ -105,7 +105,7 @@ function FindAGroup() {
         <Flex justify="center" align="center" direction="column" mt="md">
           <Text size="h1" style={{ fontSize: rem(50), fontWeight: "bold" }} variant="gradient" gradient={{ from: 'blue', to: 'cyan', deg: 90 }}>Find a Group</Text>
           <Text size='md' fw={500} style={{ marginBottom: rem(20) }}>Enter course details:</Text>
-          <Select style={{ marginBottom: rem(20) }} withAsterisk label="Course Code:" data={['CPIS', 'CPCS', 'CPIT']} {...form.getInputProps('courseCode')} onChange={(value) => {
+          <Select style={{ marginBottom: rem(20) }} withAsterisk label="Course Code:" data={['CPIS', 'CPCS', 'CPIT', 'STAT', 'BUS', 'MRKT', 'ACCT']} {...form.getInputProps('courseCode')} onChange={(value) => {
             // eslint-disable-next-line @typescript-eslint/no-unsafe-call
             form.getInputProps('courseCode').onChange(value);
             // eslint-disable-next-line @typescript-eslint/no-floating-promises
