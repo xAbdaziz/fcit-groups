@@ -94,7 +94,7 @@ function addAGroup() {
     <>
       {/* Login Modal */}
       <LoginModal opened={isModalOpen} onClose={closeModal} disableClose />
-      <form onSubmit={form.onSubmit(handleSubmit as (values: { courseCode: string; courseNumber: string; section: string; groupLink: string }) => void)}>
+      <form onSubmit={form.onSubmit(handleSubmit as (values: { courseCode: string; courseNumber: string; section: string; groupLink: string }) => void)} autoComplete='new-password'>
         <Flex justify="center" align="center" direction="column" mt="md">
           <Text size="h1" style={{ fontSize: rem(50), fontWeight: "bold" }} variant="gradient" gradient={{ from: 'blue', to: 'cyan', deg: 90 }}>Add a Group</Text>
           <Text size='md' fw={500} style={{ marginBottom: rem(20) }}>Enter course details:</Text>
