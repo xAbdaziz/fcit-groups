@@ -46,10 +46,14 @@ export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(db),
   providers: [
     EmailProvider({
-        server: env.EMAIL_SERVER,
-        from: env.EMAIL_FROM,
+      server: env.EMAIL_SERVER,
+      from: env.EMAIL_FROM,
     }),
-],
+  ],
+  pages: {
+    signIn: '/',
+    error: '/',
+  }
 };
 
 /**
