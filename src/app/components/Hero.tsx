@@ -24,7 +24,7 @@ export function HeroText() {
 
         <div className={classes.controls}>
           <Button className={classes.control} size="lg">
-            <Link href="/addAGroup">
+            <Link href="/findAGroup">
               Get Started
             </Link>
           </Button>
