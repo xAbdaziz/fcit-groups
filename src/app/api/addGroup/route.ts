@@ -13,15 +13,22 @@ export async function POST(req: Request) {
     const schema = z.object({
       courseCode: z.string().max(4).min(4),
       courseNumber: z.number().min(101).max(499),
-      section: z.string().min(2).max(3),
-      groupLink: z.string().url().max(48).refine((value) => value.startsWith("https://chat.whatsapp.com/"), { message: "Invalid group link" })
+      section: z.string().min(2).max(3).optional(),
+      groupLink: z.string().url().max(48).refine((value) => value.startsWith("https://chat.whatsapp.com/"), { message: "Invalid group link" }),
+      generalGroup: z.boolean()
     });
 
     const validData = schema.parse(await req.json());
-    const { courseCode, courseNumber, section, groupLink } = validData;
+    const { courseCode, courseNumber, section, groupLink, generalGroup } = validData;
 
     // Check if record exists
-    const recordExists = await db.whatsapp_groups.findFirst({ where: { group_link: groupLink, section: section } });
+    let recordExists;
+    if (generalGroup) {
+      recordExists = await db.whatsapp_groups.findFirst({ where: { group_link: groupLink, section: section, gender: 0 } });
+    } else {
+      recordExists = await db.whatsapp_groups.findFirst({ where: { group_link: groupLink, section: section } });
+    }
+
     if (recordExists) {
       return Response.json({ message: "Record already exists" }, { status: 400 });
     }
@@ -36,8 +43,8 @@ export async function POST(req: Request) {
 
     await db.whatsapp_groups.create({
       data: {
-        section: section,
-        gender: session.user.gender,
+        section: generalGroup ? "N/A" : section ?? "N/A",
+        gender: generalGroup ? 0 : session.user.gender,
         group_link: groupLink,
         course_id: course.course_id,
         owner_id: session.user.id
@@ -46,6 +53,7 @@ export async function POST(req: Request) {
 
     return Response.json({ message: "Success" }, { status: 200 });
   } catch (error) {
+    console.log(error)
     return Response.json({ message: "Internal server error" }, { status: 500 });
   }
 }

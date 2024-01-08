@@ -1,7 +1,7 @@
 // page.tsx
 'use client';
 import React, { useEffect, useState } from 'react';
-import { Select, Button, Text, Flex, rem, TextInput } from '@mantine/core';
+import { Select, Button, Text, Flex, rem, TextInput, Checkbox } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import LoginModal from '../components/LoginModal';
 import { useDisclosure } from '@mantine/hooks';
@@ -13,6 +13,7 @@ interface Courses {
   course_name: string;
   course_code: string;
   course_number: number;
+  general_group: boolean;
 }
 
 function addAGroup() {
@@ -34,7 +35,8 @@ function addAGroup() {
       courseCode: '',
       courseNumber: '',
       section: '',
-      groupLink: ''
+      groupLink: '',
+      generalGroup: false
     },
     validate: {
       courseCode: (value) =>
@@ -45,8 +47,8 @@ function addAGroup() {
         /^(?!$)/.test(value)
           ? null
           : "You didn't choose course number.",
-      section: (value) =>
-        /^[a-zA-Z0-9]{2,3}$/.test(value)
+      section: (value, values) =>
+        values.generalGroup || /^[a-zA-Z0-9]{2,3}$/.test(value)
           ? null
           : "You didn't enter the section, or entered Invalid section",
       groupLink: (value) =>
@@ -56,21 +58,22 @@ function addAGroup() {
     },
   });
 
-  const handleSubmit = async (values: { courseCode: string; courseNumber: string; section: string; groupLink: string }) => {
-		const addGroup = await fetch('/api/addGroup', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({
+  const handleSubmit = async (values: { courseCode: string; courseNumber: string; section: string; groupLink: string, generalGroup: boolean }) => {
+    const addGroup = await fetch('/api/addGroup', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
         courseCode: values.courseCode,
         courseNumber: parseInt(values.courseNumber),
-        section: values.section,
-        groupLink: values.groupLink
-			}),
-		});
+        section: values.generalGroup ? "NA" : values.section,
+        groupLink: values.groupLink,
+        generalGroup: values.generalGroup
+      }),
+    });
 
-    if (addGroup.status == 400){
+    if (addGroup.status == 400) {
       setMessage("Group for this section already exists!")
       return
     }
@@ -94,7 +97,7 @@ function addAGroup() {
     <>
       {/* Login Modal */}
       <LoginModal opened={isModalOpen} onClose={closeModal} disableClose />
-      <form onSubmit={form.onSubmit(handleSubmit as (values: { courseCode: string; courseNumber: string; section: string; groupLink: string }) => void)} autoComplete='new-password'>
+      <form onSubmit={form.onSubmit(handleSubmit as (values: { courseCode: string; courseNumber: string; section: string; groupLink: string, generalGroup: boolean }) => void)} autoComplete='new-password'>
         <Flex justify="center" align="center" direction="column" mt="md">
           <Text size="h1" style={{ fontSize: rem(50), fontWeight: "bold" }} variant="gradient" gradient={{ from: 'blue', to: 'cyan', deg: 90 }}>Add a Group</Text>
           <Text size='md' fw={500} style={{ marginBottom: rem(20) }}>Enter course details:</Text>
@@ -106,8 +109,9 @@ function addAGroup() {
           }}
           />
           <Select style={{ marginBottom: rem(20) }} withAsterisk label="Course Number:" data={courseNumbers.map(String)} {...form.getInputProps('courseNumber')} searchable />
-          <TextInput style={{ marginBottom: rem(20) }} withAsterisk label="Section: " {...form.getInputProps('section')}/>
-          <TextInput style={{ marginBottom: rem(20) }} withAsterisk label="Group Link: " {...form.getInputProps('groupLink')}/>
+          <TextInput style={{ marginBottom: rem(20) }} withAsterisk label="Section: " {...form.getInputProps('section')} disabled={form.values.generalGroup} />
+          <TextInput style={{ marginBottom: rem(20) }} withAsterisk label="Group Link: " {...form.getInputProps('groupLink')} />
+          <Checkbox style={{ marginBottom: rem(20) }} mt="md" label="Is this a general group? (For both males and females)" {...form.getInputProps('generalGroup', { type: 'checkbox' })} />
           <Button style={{ marginBottom: rem(50) }} type="submit" onClick={() => setPressedSubmit(true)}>Submit</Button>
           <Text size="sm" style={{ marginTop: '10px', textAlign: 'center', minHeight: '1em' }}>
             {pressedSubmit ? message : ''}
