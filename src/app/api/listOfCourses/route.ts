@@ -13,7 +13,7 @@ export async function GET(req: Request) {
 
         // Validate the extracted parameters
         const schema = z.object({
-            courseCode: z.enum(['CPIS', 'CPCS', 'CPIT', 'STAT', 'BUS', 'MRKT', 'ACCT']),
+            courseCode: z.enum(['CPIS', 'CPCS', 'CPIT', 'STAT', 'MATH', 'BUS', 'MRKT', 'ACCT']),
         });
 
         const validData = schema.parse({ courseCode });
