@@ -79,7 +79,7 @@ function FindAGroup() {
           {row.gender === 0 ? 'General' : row.gender === 1 ? 'Male' : 'Female'}
         </Table.Td>
         <Table.Td>
-          <Link href={row.group_link}>Join</Link>
+          <Link href={row.group_link} style={{ color: 'deepskyblue' }}>Join</Link>
         </Table.Td>
       </Table.Tr>
     )));
