@@ -58,6 +58,7 @@ function FindAGroup() {
   });
 
   const handleSearch = async (values: { courseCode: string; courseNumber: string }) => {
+    setRows([]);
     const response = await fetch('/api/searchGroup', {
       headers: {
         'courseCode': values.courseCode,
