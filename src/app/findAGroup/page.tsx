@@ -67,7 +67,7 @@ function FindAGroup() {
     });
 
     if (response.status !== 200) {
-      setMessage("No group was found.");
+      setMessage("No group was found, maybe you should create one and add it with \" Add a Group\" button in the menu?");
       setPressedSearch(true);
       return;
     }
