@@ -13,21 +13,21 @@ export function HeroText() {
 
       <div className={classes.inner}>
         <Title className={classes.title}>
-            FCIT Groups
+          FCIT Groups
         </Title>
 
         <Container p={0} size={600}>
           <Text size="lg" c="dimmed" className={classes.description}>
-          Join WhatsApp groups for your FCIT courses and never miss out an important updates.
+            Join WhatsApp groups for your FCIT courses and never miss out an important updates.
           </Text>
         </Container>
 
         <div className={classes.controls}>
-          <Button className={classes.control} size="lg">
-            <Link href="/findAGroup">
+          <Link href="/findAGroup">
+            <Button className={classes.control} size="lg">
               Get Started
-            </Link>
-          </Button>
+            </Button>
+          </Link>
         </div>
       </div>
     </Container>
