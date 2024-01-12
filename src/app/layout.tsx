@@ -1,7 +1,9 @@
 import "~/styles/globals.css";
 import '@mantine/core/styles.css';
+import '@mantine/notifications/styles.css';
 
 import { ColorSchemeScript, MantineProvider } from '@mantine/core';
+import { Notifications } from '@mantine/notifications';
 import { Inter } from "next/font/google";
 import { Header } from "~/app/components/Header";
 
@@ -35,6 +37,7 @@ export default async function RootLayout({
           <MantineProvider defaultColorScheme="dark">
             <Header />
             {session?.user.gender === 0 && <GenderModal />}
+            < Notifications position="top-center"/>
             {children}
           </MantineProvider>
         </SessionProvider>

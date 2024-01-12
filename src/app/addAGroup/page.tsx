@@ -6,6 +6,7 @@ import { useForm } from '@mantine/form';
 import LoginModal from '../components/LoginModal';
 import { useDisclosure } from '@mantine/hooks';
 import { useSession } from 'next-auth/react';
+import { notifications } from '@mantine/notifications';
 
 interface Courses {
   map(arg0: (course: { course_number: number; }) => number): number[];
@@ -17,8 +18,6 @@ interface Courses {
 }
 
 function addAGroup() {
-  const [pressedSubmit, setPressedSubmit] = useState(false);
-  const [message, setMessage] = useState('');
   const [courseNumbers, setCourseNumbers] = useState<number[]>([]);
   const [isModalOpen, { toggle: toggleModal, close: closeModal }] = useDisclosure(false);
 
@@ -74,12 +73,10 @@ function addAGroup() {
     });
 
     if (addGroup.status == 400) {
-      setMessage("Group for this section already exists!")
+      notifications.show({ title: 'Error', message: 'Group for this section already exists!', color: 'red' });
       return
     }
-
-    setMessage("Group added succesfully!")
-
+    notifications.show({ title: 'Success', message: 'Group added succesfully!', color: 'green' });
   };
 
   const fetchCourseNumbers = async (courseCode: string) => {
@@ -112,10 +109,7 @@ function addAGroup() {
           <TextInput style={{ marginBottom: rem(20) }} withAsterisk label="Section: " {...form.getInputProps('section')} disabled={form.values.generalGroup} />
           <TextInput style={{ marginBottom: rem(20) }} withAsterisk label="Group Link: " {...form.getInputProps('groupLink')} />
           <Checkbox style={{ marginBottom: rem(20) }} mt="md" label="Is this a general group? (For both males and females)" {...form.getInputProps('generalGroup', { type: 'checkbox' })} />
-          <Button style={{ marginBottom: rem(50) }} type="submit" onClick={() => setPressedSubmit(true)}>Submit</Button>
-          <Text size="sm" style={{ marginTop: '10px', textAlign: 'center', minHeight: '1em' }}>
-            {pressedSubmit ? message : ''}
-          </Text>
+          <Button style={{ marginBottom: rem(50) }} type="submit">Submit</Button>
         </Flex>
       </form>
     </>

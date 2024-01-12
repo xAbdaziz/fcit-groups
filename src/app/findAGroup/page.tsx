@@ -3,10 +3,10 @@
 import React, { useEffect, useState } from 'react';
 import { Select, Button, Text, Flex, rem, Table, Container } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import Link from 'next/link';
 import LoginModal from '../components/LoginModal';
 import { useDisclosure } from '@mantine/hooks';
 import { useSession } from 'next-auth/react';
+import { notifications } from '@mantine/notifications';
 
 interface Courses {
   map(arg0: (course: { course_number: number; }) => number): number[];
@@ -26,8 +26,6 @@ interface WhatsAppGroups {
 }
 
 function FindAGroup() {
-  const [pressedSearch, setPressedSearch] = useState(false);
-  const [message, setMessage] = useState('');
   const [courseNumbers, setCourseNumbers] = useState<number[]>([]);
   const [rows, setRows] = useState([]);
   const [isModalOpen, { toggle: toggleModal, close: closeModal }] = useDisclosure(false);
@@ -67,8 +65,7 @@ function FindAGroup() {
     });
 
     if (response.status !== 200) {
-      setMessage("No group was found, maybe you should create one and add it with \" Add a Group\" button in the menu?");
-      setPressedSearch(true);
+      notifications.show({title:'Error', message: 'No group was found, maybe you should create one and add it with \"Add a Group\" button in the menu?', color: 'red'});
       return;
     }
 
@@ -86,7 +83,6 @@ function FindAGroup() {
         </Table.Td>
       </Table.Tr>
     )));
-    setPressedSearch(false);
   };
 
   const fetchCourseNumbers = async (courseCode: string) => {
@@ -116,10 +112,7 @@ function FindAGroup() {
           }}
           />
           <Select style={{ marginBottom: rem(20) }} withAsterisk label="Course Number:" data={courseNumbers.map(String)} {...form.getInputProps('courseNumber')} searchable />
-          <Button style={{ marginBottom: rem(50) }} type="submit" onClick={() => setPressedSearch(true)}>Submit</Button>
-          <Text size="sm" style={{ marginTop: '10px', textAlign: 'center', minHeight: '1em' }}>
-            {pressedSearch ? message : ''}
-          </Text>
+          <Button style={{ marginBottom: rem(50) }} type="submit">Submit</Button>
         </Flex>
         {/* Tables */}
         <Container size="xs">
