@@ -17,6 +17,10 @@ interface Courses {
   general_group: boolean;
 }
 
+interface ApiResponse {
+  message: string;
+}
+
 function addAGroup() {
   const [courseNumbers, setCourseNumbers] = useState<number[]>([]);
   const [isModalOpen, { toggle: toggleModal, close: closeModal }] = useDisclosure(false);
@@ -58,25 +62,27 @@ function addAGroup() {
   });
 
   const handleSubmit = async (values: { courseCode: string; courseNumber: string; section: string; groupLink: string, generalGroup: boolean }) => {
-    const addGroup = await fetch('/api/addGroup', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        courseCode: values.courseCode,
-        courseNumber: parseInt(values.courseNumber),
-        section: values.generalGroup ? "NA" : values.section,
-        groupLink: values.groupLink,
-        generalGroup: values.generalGroup
-      }),
-    });
-
-    if (addGroup.status == 400) {
-      notifications.show({ title: 'Error', message: 'Group for this section already exists!', color: 'red' });
-      return
-    }
-    notifications.show({ title: 'Success', message: 'Group added succesfully!', color: 'green' });
+      const addGroup = await fetch('/api/addGroup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          courseCode: values.courseCode,
+          courseNumber: parseInt(values.courseNumber),
+          section: values.generalGroup ? "NA" : values.section,
+          groupLink: values.groupLink,
+          generalGroup: values.generalGroup
+        }),
+      });
+  
+      const result: ApiResponse = await addGroup.json() as ApiResponse;
+  
+      if (addGroup.ok) {
+        notifications.show({ title: 'Success', message: 'Group added successfully!', color: 'green' });
+      } else {
+        notifications.show({ title: 'Error', message: result.message || 'An error occurred!', color: 'red' });
+      }
   };
 
   const fetchCourseNumbers = async (courseCode: string) => {
