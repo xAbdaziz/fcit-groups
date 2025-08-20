@@ -34,6 +34,16 @@ declare module "next-auth" {
  */
 export const authOptions: NextAuthOptions = {
   callbacks: {
+    async signIn({ user, account, profile, email, credentials }) {
+      const stuDomain = "stu.kau.edu.sa";
+      if (user.email) {
+        const emailDomain = user.email.split('@')[1];
+        if (emailDomain !== stuDomain) {
+          return false;
+        }
+      }
+      return true;
+    },
     session: ({ session, user }) => ({
       ...session,
       user: {
@@ -53,7 +63,7 @@ export const authOptions: NextAuthOptions = {
   pages: {
     signIn: '/',
     error: '/',
-  }
+  },
 };
 
 /**
