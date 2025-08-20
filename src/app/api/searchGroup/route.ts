@@ -46,6 +46,7 @@ export async function GET(req: Request) {
             return Response.json({ message: "No group links found"}, { status: 404 });
         }
     } catch (error) {
+        console.error(error)
         return Response.json("Internal server error", { status: 500 });
     }
 }

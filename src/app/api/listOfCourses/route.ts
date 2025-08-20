@@ -27,6 +27,7 @@ export async function GET(req: Request) {
         return Response.json(courses, {status: 200})
 
     } catch (error) {
+        console.error(error)
         return Response.json("Internal server error", { status: 500 });
     }
 }

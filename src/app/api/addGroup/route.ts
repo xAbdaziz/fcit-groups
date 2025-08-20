@@ -77,6 +77,7 @@ export async function POST(req: Request) {
     // Return a success response
     return Response.json({ message: "Success" }, { status: 200 });
   } catch (error) {
+    console.error(error)
     return Response.json({ message: "Internal server error" }, { status: 500 });
   }
 }
