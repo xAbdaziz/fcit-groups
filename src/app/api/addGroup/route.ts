@@ -16,12 +16,15 @@ export async function POST(req: Request) {
       courseCode: z.string().max(4).min(4),
       courseNumber: z.number().min(101).max(499),
       section: z.string().min(1).max(3).optional(),
-      groupLink: z.string().url().max(48).refine((value) => value.startsWith("https://chat.whatsapp.com/"), { message: "Invalid group link" }),
+      groupLink: z.string().url().max(64).refine((value) => value.startsWith("https://chat.whatsapp.com/"), { message: "Invalid group link" }),
       generalGroup: z.boolean()
     });
 
     // Parse and validate the request data
     const validData = schema.parse(await req.json());
+    if (!validData) {
+      return Response.json({ message: "Invalid data, maybe you entered a wrong link or the course doesn't exist" }, { status: 400 });
+    }
     const { courseCode, courseNumber, section, groupLink, generalGroup } = validData;
 
     // Retrieve the course based on courseCode and courseNumber

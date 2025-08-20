@@ -20,7 +20,7 @@ model courses {
 model whatsapp_groups {
   group_id   String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   section    String   @db.VarChar(3)
-  group_link String   @db.VarChar(50)
+  group_link String   @db.VarChar(64)
   course_id  Int?
   gender     Int?     @default(0)
   owner_id   String?
