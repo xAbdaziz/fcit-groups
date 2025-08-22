@@ -57,12 +57,11 @@ function FindAGroup() {
 
   const handleSearch = async (values: { courseCode: string; courseNumber: string }) => {
     setRows([]);
-    const response = await fetch('/api/searchGroup', {
-      headers: {
-        'courseCode': values.courseCode,
-        'courseNumber': values.courseNumber.toString()
-      }
+    const params = new URLSearchParams({
+      courseCode: values.courseCode,
+      courseNumber: values.courseNumber.toString()
     });
+    const response = await fetch(`/api/groups?${params.toString()}`);
 
     if (response.status !== 200) {
       notifications.show({title:'Error', message: 'No group was found, maybe you should create one and add it with \"Add a Group\" button in the menu?', color: 'red'});
@@ -86,11 +85,8 @@ function FindAGroup() {
   };
 
   const fetchCourseNumbers = async (courseCode: string) => {
-    const response = await fetch('/api/listOfCourses', {
-      headers: {
-        'courseCode': courseCode
-      }
-    });
+    const params = new URLSearchParams({ courseCode });
+    const response = await fetch(`/api/courses?${params.toString()}`);
     const data: Courses = await response.json() as Courses;
     const courseNumbers: number[] = data.map((course: { course_number: number; }) => course.course_number);
     setCourseNumbers(courseNumbers);

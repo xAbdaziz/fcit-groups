@@ -22,13 +22,12 @@ export function GenderModal() {
 
 		const genderValue = value === 'Male' ? 1 : 2;
 
-		const response = await fetch('/api/updateGender', {
-			method: 'POST',
+		const response = await fetch(`/api/users/${session?.user.id}`, {
+			method: 'PATCH',
 			headers: {
 				'Content-Type': 'application/json',
 			},
 			body: JSON.stringify({
-				email: session?.user.email,
 				gender: genderValue,
 			}),
 		});

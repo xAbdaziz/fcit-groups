@@ -62,7 +62,7 @@ function addAGroup() {
   });
 
   const handleSubmit = async (values: { courseCode: string; courseNumber: string; section: string; groupLink: string, generalGroup: boolean }) => {
-      const addGroup = await fetch('/api/addGroup', {
+      const addGroup = await fetch('/api/groups', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -86,11 +86,8 @@ function addAGroup() {
   };
 
   const fetchCourseNumbers = async (courseCode: string) => {
-    const response = await fetch('/api/listOfCourses', {
-      headers: {
-        'courseCode': courseCode
-      }
-    });
+    const params = new URLSearchParams({ courseCode });
+    const response = await fetch(`/api/courses?${params.toString()}`);
     const data: Courses = await response.json() as Courses;
     const courseNumbers: number[] = data.map((course: { course_number: number; }) => course.course_number);
     setCourseNumbers(courseNumbers);
